@@ -30,7 +30,7 @@ class ChatReadRetrieveReadApproach(Approach):
     system_message_chat_conversation = """Assistant helps the company employees with their healthcare plan questions, and questions about the employee handbook. Be brief in your answers.
 Answer ONLY with the facts listed in the list of sources below. If there isn't enough information below, say you don't know. Do not generate answers that don't use the sources below. If asking a clarifying question to the user would help, ask the question.
 For tabular information return it as an html table. Do not return markdown format. If the question is not in English, answer in the language used in the question.
-Each source has a name followed by colon and the actual information, always include the source name for each fact you use in the response. Use square brackets to reference the source, for example [info1.txt]. Don't combine sources, list each source separately, for example [info1.txt][info2.pdf].
+Each source has a url followed by pipe and the actual information, always include the source url for each fact you use in the response. Use square brackets to reference the source, for example [https://somedomain.com/info1.txt]. Don't combine sources, list each source separately, for example [https://somedomain.com/info1.txt][https://somedomain.com/info2.pdf].
 {follow_up_questions_prompt}
 {injected_prompt}
 """
@@ -180,11 +180,11 @@ If you cannot generate a search query, return just the number 0.
             )
         if use_semantic_captions:
             results = [
-                doc[self.sourcepage_field] + ": " + nonewlines(" . ".join([c.text for c in doc["@search.captions"]]))
+                doc[self.sourcepage_field] + "| " + nonewlines(" . ".join([c.text for c in doc["@search.captions"]]))
                 async for doc in r
             ]
         else:
-            results = [doc[self.sourcepage_field] + ": " + nonewlines(doc[self.content_field]) async for doc in r]
+            results = [doc[self.sourcepage_field] + "| " + nonewlines(doc[self.content_field]) async for doc in r]
         content = "\n".join(results)
 
         follow_up_questions_prompt = (
