@@ -162,14 +162,18 @@ class Approach(ABC):
     ) -> list[str]:
         if use_semantic_captions:
             return [
-                (self.get_citation((doc.sourcepage or ""), use_image_citation))
+                #(self.get_citation((doc.sourcepage or ""), use_image_citation))
+                doc.sourcefile
                 + ": "
                 + nonewlines(" . ".join([cast(str, c.text) for c in (doc.captions or [])]))
                 for doc in results
             ]
         else:
             return [
-                (self.get_citation((doc.sourcepage or ""), use_image_citation)) + ": " + nonewlines(doc.content or "")
+                #(self.get_citation((doc.sourcepage or ""), use_image_citation)) 
+                doc.sourcefile
+                + ": " 
+                + nonewlines(doc.content or "")
                 for doc in results
             ]
 
